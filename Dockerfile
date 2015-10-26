@@ -2,14 +2,16 @@ FROM gliderlabs/alpine
 
 MAINTAINER Steven Borrelli <steve@aster.is>
 
-ENV CONSUL_TEMPLATE_VERSION=0.11.0
+ENV CONSUL_TEMPLATE_VERSION=0.10.0
 
 RUN apk-install bash haproxy ca-certificates
 
-ADD https://github.com/hashicorp/consul-template/releases/download/v${CONSUL_TEMPLATE_VERSION}/consul_template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip /
+ADD https://github.com/hashicorp/consul-template/releases/download/v${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.tar.gz /
 
-RUN unzip consul_template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
-    mv consul-template /usr/local/bin/consul-template
+RUN tar zxvf consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.tar.gz && \
+    mv consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64/consul-template /usr/local/bin/consul-template && \
+    rm -rf /consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.tar.gz && \
+    rm -rf /consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64
 
 RUN mkdir -p /haproxy /consul-template/config.d /consul-template/template.d
 
