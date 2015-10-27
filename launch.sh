@@ -57,7 +57,7 @@ function launch_haproxy {
 
     vars=$@
 
-    ln -s /consul-template/template.d/${HAPROXY_MODE}.tmpl \
+    ln -sf /consul-template/template.d/${HAPROXY_MODE}.tmpl \
           /consul-template/template.d/haproxy.tmpl
 
     ${CONSUL_TEMPLATE} -config ${CONSUL_CONFIG} \
