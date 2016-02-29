@@ -1,8 +1,8 @@
-FROM gliderlabs/alpine
+FROM gliderlabs/alpine:3.3
 
 MAINTAINER Steven Borrelli <steve@aster.is>
 
-ENV CONSUL_TEMPLATE_VERSION=0.10.0
+ENV CONSUL_TEMPLATE_VERSION=0.13.0
 
 RUN apk-install bash haproxy ca-certificates
 
