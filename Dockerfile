@@ -15,11 +15,11 @@ RUN apk add --update wget zip && \
     chmod +x /usr/local/bin/dumb-init && \
     # install haproxy
     /tmp/install-haproxy.sh && \
-    # install consul-template
-    wget https://releases.hashicorp.com/consul-template/${CONSUL_TEMPLATE_VERSION}/consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
-    unzip consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip  && \
+    # install consul-template 
+    # NOTE: We use a patched version of 0.15.0 which removes some keys from the dedupe state to save disk space
+    wget -O consul-template https://github.com/udacity/consul-template/releases/download/v0.15.0-patched/consul-template-0.15.0-patched && \
     mv consul-template /usr/local/bin/consul-template && \
-    rm -rf consul-template_${CONSUL_TEMPLATE_VERSION}_linux_amd64.zip && \
+    chmod +x /usr/local/bin/consul-template && \
     # cleanup
     apk del wget zip && \
     rm -rf /var/cache/apk/*
