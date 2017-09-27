@@ -3,7 +3,6 @@ FROM alpine:3.4
 MAINTAINER Steven Borrelli <steve@aster.is>
 
 ENV CONSUL_TEMPLATE_VERSION=0.15.0
-ENV CONSUL_TEMPLATE_VERSION_SHA=6142da5
 ENV HAPROXY_VERSION=1.6.6
 
 ADD install-haproxy.sh /tmp/install-haproxy.sh
@@ -17,10 +16,10 @@ RUN apk add --update wget zip && \
     # install haproxy
     /tmp/install-haproxy.sh && \
     # install consul-template 
-    # NOTE: we are using a patched version
+    # NOTE: We use a patched version of 0.15.0 which removes some keys from the dedupe state to save disk space
     wget -O consul-template https://github.com/udacity/consul-template/releases/download/v0.15.0-patched/consul-template-0.15.0-patched && \
-    chmod +x /usr/local/bin/consul-template && \
     mv consul-template /usr/local/bin/consul-template && \
+    chmod +x /usr/local/bin/consul-template && \
     # cleanup
     apk del wget zip && \
     rm -rf /var/cache/apk/*
