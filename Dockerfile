@@ -19,6 +19,7 @@ RUN apk add --update wget zip && \
     # install consul-template 
     # NOTE: we are using a patched version
     wget -O consul-template https://github.com/udacity/consul-template/releases/download/v0.15.0-patched/consul-template-0.15.0-patched && \
+    chmod +x /usr/local/bin/consul-template && \
     mv consul-template /usr/local/bin/consul-template && \
     # cleanup
     apk del wget zip && \
