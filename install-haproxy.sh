@@ -5,7 +5,7 @@ apk update
 
 HAPROXY_VERSION=${HAPROXY_VERSION:-1.6.6}
 HAPROXY_MAJOR_VERSION=${HAPROXY_VERSION:0:3}
-LIBSLZ_VERSION=v1.0.0
+LIBSLZ_VERSION=v1.1.0
 BUILD_DEPS="curl make gcc g++ linux-headers python pcre-dev openssl-dev lua5.3-dev"
 RUN_DEPS="pcre libssl1.0 musl libcrypto1.0 busybox lua5.3-libs"
 
@@ -13,7 +13,7 @@ RUN_DEPS="pcre libssl1.0 musl libcrypto1.0 busybox lua5.3-libs"
 apk add --virtual build-dependencies ${BUILD_DEPS}
 
 # Compile libslz
-curl -OJ "http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=v1.0.0;sf=tgz"
+curl -OJ "http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=${LIBSLZ_VERSION};sf=tgz"
 tar zxvf libslz-${LIBSLZ_VERSION}.tar.gz
 make -C libslz static
 
