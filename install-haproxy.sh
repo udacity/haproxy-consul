@@ -3,24 +3,34 @@ set -ex
 cd /tmp
 apk update
 
-HAPROXY_VERSION=${HAPROXY_VERSION:-1.6.6}
+HAPROXY_VERSION=1.8.14
 HAPROXY_MAJOR_VERSION=${HAPROXY_VERSION:0:3}
+HAPROXY_SHA256=b17e402578be85e58af7a3eac99b1f675953bea9f67af2e964cf8bdbd1bd3fdf
 LIBSLZ_VERSION=v1.1.0
-BUILD_DEPS="curl make gcc g++ linux-headers python pcre-dev openssl-dev lua5.3-dev"
+LIBSLZ_SHA256=93073cbb68b3b77fb4289c3f5550ff466b4e10679fb3ac12bb7d5fe157c42498
+BUILD_DEPS="make gcc g++ linux-headers python pcre-dev openssl-dev lua5.3-dev"
 RUN_DEPS="pcre libssl1.0 musl libcrypto1.0 busybox lua5.3-libs"
 
 # install build dependencies
 apk add --virtual build-dependencies ${BUILD_DEPS}
 
 # Compile libslz
-curl -OJ "http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=${LIBSLZ_VERSION};sf=tgz"
-tar zxvf libslz-${LIBSLZ_VERSION}.tar.gz
+curl -L -o libslz-${LIBSLZ_VERSION}.tar.gz "http://git.1wt.eu/web?p=libslz.git;a=snapshot;h=${LIBSLZ_VERSION};sf=tgz"
+if [ "$(sha256sum libslz-${LIBSLZ_VERSION}.tar.gz | cut -f1 -d\ )" != "${LIBSLZ_SHA256}" ]; then
+    (>2 echo "sha256sum does not match!")
+    exit 1
+fi
+tar -xvf libslz-${LIBSLZ_VERSION}.tar.gz
 make -C libslz static
 
 # fetch haproxy
-wget http://www.haproxy.org/download/${HAPROXY_MAJOR_VERSION}/src/haproxy-${HAPROXY_VERSION}.tar.gz
-tar -xzf haproxy-*.tar.gz
-cd haproxy-*
+curl -L -o haproxy-${HAPROXY_VERSION}.tar.gz "http://www.haproxy.org/download/${HAPROXY_MAJOR_VERSION}/src/haproxy-${HAPROXY_VERSION}.tar.gz"
+if [ "$(sha256sum haproxy-${HAPROXY_VERSION}.tar.gz | cut -f1 -d\ )" != "${HAPROXY_SHA256}" ]; then
+    (>2 echo "sha256sum does not match!")
+    exit 1
+fi
+tar -xzf haproxy-${HAPROXY_VERSION}.tar.gz
+cd haproxy-${HAPROXY_VERSION}
 
 # build haproxy
 make PREFIX=/usr TARGET=linux2628 USE_PCRE=1 USE_PCRE_JIT=1 USE_OPENSSL=1 \

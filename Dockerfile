@@ -1,24 +1,21 @@
 FROM alpine:3.8
 
-ENV CONSUL_TEMPLATE_VERSION=0.19.5-nochecks
-ENV HAPROXY_VERSION=1.8.14
-
 ADD install-haproxy.sh /tmp/install-haproxy.sh
 
-RUN apk add --update wget zip && \
+RUN apk add --update curl && \
     # install deployed packages
     apk add libnl3 bash ca-certificates && \
     # install dumb-init
-    wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
+    curl -L -o /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.2/dumb-init_1.2.2_amd64 && \
     chmod +x /usr/local/bin/dumb-init && \
     # install haproxy
     /tmp/install-haproxy.sh && \
     # install consul-template 
     # NOTE: We use a patched version of 0.19.5 which removes some keys from the dedupe state to save disk space
-    wget -O /usr/local/bin/consul-template https://github.com/udacity/consul-template/releases/download/v0.19.5-nochecks/consul-template && \
+    curl -L -o /usr/local/bin/consul-template https://github.com/udacity/consul-template/releases/download/v0.19.5-nochecks/consul-template && \
     chmod +x /usr/local/bin/consul-template && \
     # cleanup
-    apk del wget zip && \
+    apk del curl && \
     rm -rf /var/cache/apk/*
 
 RUN mkdir -p /haproxy /consul-template/config.d /consul-template/template.d
