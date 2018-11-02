@@ -1,5 +1,5 @@
 global
-    maxconn {{or (key "service/haproxy/maxconn") 256}}
+    maxconn {{keyOrDefault "service/haproxy/maxconn" "256"}}
     debug
     # Recommended SSL ciphers as per https://hynek.me/articles/hardening-your-web-servers-ssl-ciphers/
     ssl-default-bind-options no-sslv3
@@ -13,9 +13,9 @@ defaults
     mode http
     option forwardfor
     option http-server-close
-    timeout connect {{or (key "service/haproxy/timeouts/connect") "5000ms"}}
-    timeout client {{or (key "service/haproxy/timeouts/client") "50000ms"}}
-    timeout server {{or (key "service/haproxy/timeouts/server") "50000ms"}}
+    timeout connect {{keyOrDefault "service/haproxy/timeouts/connect" "5000ms"}}
+    timeout client {{keyOrDefault "service/haproxy/timeouts/client" "50000ms"}}
+    timeout server {{keyOrDefault "service/haproxy/timeouts/server" "50000ms"}}
 
 ### HTTP(S) frontend ###
 frontend www
