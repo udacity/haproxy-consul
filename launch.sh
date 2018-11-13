@@ -79,8 +79,7 @@ function launch_haproxy {
 
     exec ${CONSUL_TEMPLATE} -config ${CONSUL_CONFIG} \
                        -log-level ${CONSUL_LOGLEVEL} \
-                       -wait ${CONSUL_MINWAIT}:${CONSUL_MAXWAIT} \
-                       -consul ${CONSUL_CONNECT} ${ctargs} "${vars[@]}"
+                       -consul-addr ${CONSUL_CONNECT} ${ctargs} "${vars[@]}"
 
 }
 

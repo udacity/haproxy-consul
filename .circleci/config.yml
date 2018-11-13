@@ -1,0 +1,37 @@
+version: 2
+jobs:
+  test:
+    docker:
+      - image: circleci/golang:1.10
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build
+          command: make build
+
+  deploy:
+    docker:
+      - image: circleci/golang:1.10
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Docker Login
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+          name: Push to Docker Hub
+          command: make push
+
+workflows:
+  version: 2
+  build-and-test:
+    jobs:
+      - test
+      - deploy:
+          context: org-global
+          requires:
+            - test
+          filters:
+            branches:
+              only: master

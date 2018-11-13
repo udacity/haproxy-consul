@@ -1,6 +1,6 @@
 GROUP             := udacity
 NAME              := haproxy-consul
-VERSION           ?= $(shell git rev-parse --short HEAD)
+VERSION           ?= $(shell grep HAPROXY_VERSION= install-haproxy.sh | cut -f2 -d=)-$(shell git rev-parse --short HEAD)
 DOCKER_REPO       := udacity/$(NAME)
 DOCKER_IMAGE      := $(DOCKER_REPO):$(VERSION)
 DOCKER_RM         := $(shell echo $${DOCKER_RM:-true})
