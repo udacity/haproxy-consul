@@ -11,8 +11,8 @@ RUN apk add --update curl && \
     # install haproxy
     /tmp/install-haproxy.sh && \
     # install consul-template 
-    # NOTE: We use a patched version of 0.19.5 which removes some keys from the dedupe state to save disk space
-    curl -L -o /usr/local/bin/consul-template https://github.com/udacity/consul-template/releases/download/v0.19.5-nochecks/consul-template && \
+    # NOTE: We use a patched version of 0.19.5 which removes checks from the dedup state and adds consul query rate limits
+    curl -L -o /usr/local/bin/consul-template https://github.com/udacity/consul-template/releases/download/v0.19.5-nochecks-ratelimit/consul-template && \
     chmod +x /usr/local/bin/consul-template && \
     # cleanup
     apk del curl && \
